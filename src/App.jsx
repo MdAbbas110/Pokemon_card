@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
+import PokemonThumbnail from "./components/PokemonThumbnail"
 
 function App() {
 
-const [allPokemon , setAllPokemon] = useState([])
+const [allPokemons , setAllPokemon] = useState([])
 
 const [loadMore, setLoadMore] = useState('https://pokeapi.co/api/v2/pokemon?limit=20')
   
@@ -21,24 +22,32 @@ const getAllPokemon = async () => {
     })
   }
   createPokemonObject(data.results)
-  await console.log(allPokemon);
+  await console.log(allPokemons);
 }
 
 useEffect(() => {
   getAllPokemon()
 },[]) 
 
-  return (
-    <main className="app-container">
-      <h1>Pokemon Evolution</h1>
-      <div className="pokemon-container">
-          <div className="all-container">
-
-          </div>
-          <button className="load-more">Load More</button>
+return (
+  <div className="app-contaner">
+    <h1>Pokemon Evolution</h1>
+    <div className="pokemon-container">
+      <div className="all-container">
+        {allPokemons.map( (pokemonStats, index) => 
+          <PokemonThumbnail
+            key={index}
+            id={pokemonStats.id}
+            image={pokemonStats.sprites.other.dream_world.front_default}
+            name={pokemonStats.name}
+            type={pokemonStats.types[0].type.name}
+          />)}
+        
       </div>
-    </main>
-  )
+        <button className="load-more" onClick={() => getAllPokemon()}>Load more</button>
+    </div>
+  </div>
+);
 }
 
 export default App
